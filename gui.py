@@ -25,6 +25,36 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.centralwidget)
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        _translate = QtCore.QCoreApplication.translate
+
+        # Area 0
+
+        self.scrollArea_4 = QtWidgets.QScrollArea(self.centralwidget)
+        self.scrollArea_4.setWidgetResizable(True)
+        self.scrollArea_4.setObjectName("scrollArea_4")
+        self.scrollAreaWidgetContents_12 = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents_12.setGeometry(QtCore.QRect(0, 0, 196, 409))
+        self.scrollAreaWidgetContents_12.setObjectName("scrollAreaWidgetContents_12")
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_12)
+        self.verticalLayout_6.setObjectName("verticalLayout_6")
+
+        self.runButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_12)
+        self.runButton.setObjectName("runButton")
+        self.runButton.setText(_translate("MainWindow", "Run"))
+        self.verticalLayout_6.addWidget(self.runButton)
+
+        self.editButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_12)
+        self.editButton.setObjectName("editButton")
+        self.editButton.setText(_translate("MainWindow", "Edit"))
+        self.verticalLayout_6.addWidget(self.editButton)
+
+        self.removeButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_12)
+        self.removeButton.setObjectName("removeButton")
+        self.removeButton.setText(_translate("MainWindow", "Remove"))
+        self.verticalLayout_6.addWidget(self.removeButton)
+
+        self.scrollArea_4.setWidget(self.scrollAreaWidgetContents_12)
+        self.horizontalLayout_8.addWidget(self.scrollArea_4)
 
         # Area 1
 
@@ -85,13 +115,14 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents_11 = QtWidgets.QWidget()
         self.scrollAreaWidgetContents_11.setGeometry(QtCore.QRect(0, 0, 196, 409))
         self.scrollAreaWidgetContents_11.setObjectName("scrollAreaWidgetContents_11")
-        
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_11)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
+
+        # Adding image
         
         self.pixmap = QPixmap('Images/Cats.png')
         self.label.setPixmap(self.pixmap)
-        self.label.resize(self.pixmap.width(), self.pixmap.height())
+        self.label.resize(5, 5)
         self.verticalLayout_6.addWidget(self.label)
 
         self.scrollArea_3.setWidget(self.scrollAreaWidgetContents_11)
@@ -115,7 +146,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton.setText(_translate("MainWindow", "Move"))
-        self.pushButton_17.setText(_translate("MainWindow", "loop"))
+        self.pushButton_17.setText(_translate("MainWindow", "Loop"))
         self.pushButton_6.setText(_translate("MainWindow", "PushButton"))
         self.pushButton_9.setText(_translate("MainWindow", "PushButton"))
         self.pushButton_14.setText(_translate("MainWindow", "PushButton"))
