@@ -210,6 +210,8 @@ class Ui_MainWindow(object):
   
         #self.buttons[length - 1].setObjectName("pushButton" + str(length + 20))
         self.verticalLayout_5.addWidget(but)
+    def to_run_blocks():
+        return
 
     def select_blocks_to_run(self,button_name):
         if self.dict[button_name].styleSheet() == "QPushButton{background-color : lightblue;}":
@@ -219,10 +221,15 @@ class Ui_MainWindow(object):
     def ready_to_connect(self):
         if self.ready_to_select.styleSheet() == "QPushButton{background-color : lightblue;}":
             self.ready_to_select.setStyleSheet("QPushButton""{""background-color : green;}")
-        else:
-            return
-        for key in self.dict:
-            self.dict[key].clicked.connect(partial(self.select_blocks_to_run,key))                    
+            for key in self.dict:
+                self.dict[key].clicked.connect(partial(self.select_blocks_to_run,key))
+        elif self.ready_to_select.styleSheet() == "QPushButton{background-color : green;}":
+            self.ready_to_select.setStyleSheet("QPushButton""{""background-color : lightblue;}")
+            for key in self.dict:
+                self.dict[key].disconnect()
+                self.dict[key].setStyleSheet("QPushButton""{""background-color : lightblue;}")
+    def donothing(self):
+        return                   
 
     def clickme(self):
         if self.is_removed == 0:
