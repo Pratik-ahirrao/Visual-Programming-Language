@@ -11,10 +11,12 @@
 from functools import partial
 from pprint import pprint
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import QPixmap
 
 class Ui_MainWindow(object):
     def __init__(self):
         self.buttons = []
+        self.label = QtWidgets.QLabel()
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -23,6 +25,9 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.centralwidget)
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+
+        # Area 1
+
         self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
@@ -33,7 +38,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.pushButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton.setObjectName("pushButton")
-        self.pushButton.clicked.connect(partial(self.buttonClicks, "pushButton"))
+        self.pushButton.clicked.connect(partial(self.buttonClicks, "move 10 inches"))
         self.verticalLayout_4.addWidget(self.pushButton)
         self.pushButton_17 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_17.setObjectName("pushButton_17")
@@ -57,6 +62,9 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.addWidget(self.pushButton_10)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents_9)
         self.horizontalLayout_8.addWidget(self.scrollArea)
+
+        # Area 2
+
         self.scrollArea_2 = QtWidgets.QScrollArea(self.centralwidget)
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollArea_2.setObjectName("scrollArea_2")
@@ -67,31 +75,47 @@ class Ui_MainWindow(object):
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.scrollArea_2.setWidget(self.scrollAreaWidgetContents_10)
         self.horizontalLayout_8.addWidget(self.scrollArea_2)
+
+        # Area 3
+        
+
         self.scrollArea_3 = QtWidgets.QScrollArea(self.centralwidget)
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollArea_3.setObjectName("scrollArea_3")
         self.scrollAreaWidgetContents_11 = QtWidgets.QWidget()
         self.scrollAreaWidgetContents_11.setGeometry(QtCore.QRect(0, 0, 196, 409))
         self.scrollAreaWidgetContents_11.setObjectName("scrollAreaWidgetContents_11")
+        
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_11)
+        self.verticalLayout_6.setObjectName("verticalLayout_6")
+        
+        self.pixmap = QPixmap('Images/Cats.png')
+        self.label.setPixmap(self.pixmap)
+        self.label.resize(self.pixmap.width(), self.pixmap.height())
+        self.verticalLayout_6.addWidget(self.label)
+
         self.scrollArea_3.setWidget(self.scrollAreaWidgetContents_11)
         self.horizontalLayout_8.addWidget(self.scrollArea_3)
+
+        # Main Window
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 639, 24))
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.pushButton.setText(_translate("MainWindow", "PushButton"))
-        self.pushButton_17.setText(_translate("MainWindow", "PushButton"))
+        self.pushButton.setText(_translate("MainWindow", "Move"))
+        self.pushButton_17.setText(_translate("MainWindow", "loop"))
         self.pushButton_6.setText(_translate("MainWindow", "PushButton"))
         self.pushButton_9.setText(_translate("MainWindow", "PushButton"))
         self.pushButton_14.setText(_translate("MainWindow", "PushButton"))
@@ -102,7 +126,6 @@ class Ui_MainWindow(object):
         length = len(self.buttons)
         self.buttons[length - 1].setObjectName("pushButton" + str(length + 20))
         self.verticalLayout_5.addWidget(self.buttons[length - 1])
-        pprint(buttonName)
 
 
 if __name__ == "__main__":
