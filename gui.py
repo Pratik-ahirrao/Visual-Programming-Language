@@ -17,6 +17,11 @@ class Ui_MainWindow(object):
     def __init__(self):
         self.buttons = []
         self.label = QtWidgets.QLabel()
+        self.is_removed = 0
+        self.is_run = 0
+        self.is_edited = 0
+        self.num_buttons =0
+        self.dict = {}
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -41,18 +46,57 @@ class Ui_MainWindow(object):
         self.runButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_12)
         self.runButton.setObjectName("runButton")
         self.runButton.setText(_translate("MainWindow", "Run"))
+        #self.runButton.setStyleSheet("background-color : yellow")
+        self.runButton.setStyleSheet("QPushButton"
+                             "{"
+                             "background-color : lightblue;"
+                             "}"
+                             "QPushButton::pressed"
+                             "{"
+                             "background-color : green;"
+                             "}"
+                             )
         self.verticalLayout_6.addWidget(self.runButton)
 
         self.editButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_12)
         self.editButton.setObjectName("editButton")
+        self.editButton.setStyleSheet("QPushButton"
+                             "{"
+                             "background-color : lightblue;"
+                             "}"
+                             "QPushButton::pressed"
+                             "{"
+                             "background-color : green;"
+                             "}"
+                             )
         self.editButton.setText(_translate("MainWindow", "Edit"))
+
         self.verticalLayout_6.addWidget(self.editButton)
 
         self.removeButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_12)
         self.removeButton.setObjectName("removeButton")
         self.removeButton.setText(_translate("MainWindow", "Remove"))
+        self.removeButton.setStyleSheet("QPushButton"
+                             "{"
+                             "background-color : lightblue;"
+                             "}")
+        self.removeButton.clicked.connect(self.clickme)
         self.verticalLayout_6.addWidget(self.removeButton)
 
+        self.scrollArea_4.setWidget(self.scrollAreaWidgetContents_12)
+        self.horizontalLayout_8.addWidget(self.scrollArea_4)
+
+        
+
+        self.ready_to_select = QtWidgets.QPushButton(self.scrollAreaWidgetContents_12)
+        self.ready_to_select.setObjectName("ready to select")
+        self.ready_to_select.setText(_translate("MainWindow", "Ready to select"))
+        self.ready_to_select.setStyleSheet("QPushButton"
+                             "{"
+                             "background-color : lightblue;"
+                             "}")
+        self.ready_to_select.clicked.connect(self.ready_to_connect)
+        self.verticalLayout_6.addWidget(self.ready_to_select)
         self.scrollArea_4.setWidget(self.scrollAreaWidgetContents_12)
         self.horizontalLayout_8.addWidget(self.scrollArea_4)
 
@@ -68,27 +112,27 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.pushButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton.setObjectName("pushButton")
-        self.pushButton.clicked.connect(partial(self.buttonClicks, "move 10 inches"))
+        self.pushButton.clicked.connect(self.buttonClicks)
         self.verticalLayout_4.addWidget(self.pushButton)
         self.pushButton_17 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
-        self.pushButton_17.setObjectName("pushButton_17")
-        self.pushButton_17.clicked.connect(partial(self.buttonClicks, "pushButton_17"))
+        self.pushButton_17.setObjectName("pushButton_3")
+        self.pushButton_17.clicked.connect(self.buttonClicks)
         self.verticalLayout_4.addWidget(self.pushButton_17)
         self.pushButton_6 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_6.setObjectName("pushButton_6")
-        self.pushButton_6.clicked.connect(partial(self.buttonClicks, "pushButton_6"))
+        self.pushButton_6.clicked.connect(self.buttonClicks)
         self.verticalLayout_4.addWidget(self.pushButton_6)
         self.pushButton_9 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_9.setObjectName("pushButton_9")
-        self.pushButton_9.clicked.connect(partial(self.buttonClicks, "pushButton_9"))
+        self.pushButton_9.clicked.connect(self.buttonClicks)
         self.verticalLayout_4.addWidget(self.pushButton_9)
         self.pushButton_14 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_14.setObjectName("pushButton_14")
-        self.pushButton_14.clicked.connect(partial(self.buttonClicks, "pushButton_14"))
+        self.pushButton_14.clicked.connect(self.buttonClicks)
         self.verticalLayout_4.addWidget(self.pushButton_14)
         self.pushButton_10 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_10.setObjectName("pushButton_10")
-        self.pushButton_10.clicked.connect(partial(self.buttonClicks, "pushButton_10"))
+        self.pushButton_10.clicked.connect(self.buttonClicks)
         self.verticalLayout_4.addWidget(self.pushButton_10)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents_9)
         self.horizontalLayout_8.addWidget(self.scrollArea)
@@ -120,7 +164,7 @@ class Ui_MainWindow(object):
 
         # Adding image
         
-        self.pixmap = QPixmap('Images/Cats.png')
+        self.pixmap = QPixmap('images.jpg')
         self.label.setPixmap(self.pixmap)
         self.label.resize(5, 5)
         self.verticalLayout_6.addWidget(self.label)
@@ -152,11 +196,51 @@ class Ui_MainWindow(object):
         self.pushButton_14.setText(_translate("MainWindow", "PushButton"))
         self.pushButton_10.setText(_translate("MainWindow", "PushButton"))
 
-    def buttonClicks(self, buttonName):
-        self.buttons.append(QtWidgets.QPushButton(buttonName,self.scrollAreaWidgetContents_10))
+    def buttonClicks(self):
+       
+        
+        
+        but = QtWidgets.QPushButton(str(self.num_buttons),self.scrollAreaWidgetContents_10)
+        but.setObjectName(str(self.num_buttons))
+        but.setStyleSheet("QPushButton""{""background-color : lightblue;""}")
+        self.dict[self.num_buttons] = but
+        self.num_buttons+=1
+        self.buttons.append(but)
         length = len(self.buttons)
-        self.buttons[length - 1].setObjectName("pushButton" + str(length + 20))
-        self.verticalLayout_5.addWidget(self.buttons[length - 1])
+  
+        #self.buttons[length - 1].setObjectName("pushButton" + str(length + 20))
+        self.verticalLayout_5.addWidget(but)
+
+    def select_blocks_to_run(self,button_name):
+        if self.dict[button_name].styleSheet() == "QPushButton{background-color : lightblue;}":
+            self.dict[button_name].setStyleSheet("QPushButton{background-color : green;}")
+        elif self.dict[button_name].styleSheet() == "QPushButton{background-color : green;}":
+            self.dict[button_name].setStyleSheet("QPushButton{background-color : lightblue;}")
+    def ready_to_connect(self):
+        if self.ready_to_select.styleSheet() == "QPushButton{background-color : lightblue;}":
+            self.ready_to_select.setStyleSheet("QPushButton""{""background-color : green;}")
+        else:
+            return
+        for key in self.dict:
+            self.dict[key].clicked.connect(partial(self.select_blocks_to_run,key))                    
+
+    def clickme(self):
+        if self.is_removed == 0:
+            self.removeButton.setStyleSheet("QPushButton{background-color : green;}")
+            self.is_removed = 1
+            print(self.removeButton.styleSheet())
+        else:
+            self.removeButton.setStyleSheet("QPushButton{background-color : lightblue;}")
+            self.is_removed = 0
+
+                
+        print("pressed")                     
+
+        # printing pressed       
+
+
+
+
 
 
 if __name__ == "__main__":
