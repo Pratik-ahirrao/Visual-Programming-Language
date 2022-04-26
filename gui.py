@@ -9,14 +9,18 @@
 
 
 from cProfile import label
+from copyreg import constructor
 from functools import partial
 from pprint import pprint
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import *
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QLabel, QInputDialog
+from PyQt5.QtWidgets import *
+# from file_with_ui import Ui_MainWindow
 
-class Ui_MainWindow(object):
+class Main(QMainWindow):
     def __init__(self):
         self.buttons = []
         self.label = QtWidgets.QLabel()
@@ -26,6 +30,8 @@ class Ui_MainWindow(object):
         self.is_edited = 0
         self.num_buttons =0
         self.dict = {}
+        super().__init__()
+        self.setupUi(self)
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -116,28 +122,27 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.pushButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton.setObjectName("pushButton")
-        self.pushButton.clicked.connect(self.buttonClicks)
-        self.pushButton.clicked.connect(self.move_image)
+        self.pushButton.clicked.connect(partial(self.buttonClicks, "Move"))
         self.verticalLayout_4.addWidget(self.pushButton)
         self.pushButton_17 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_17.setObjectName("pushButton_3")
-        self.pushButton_17.clicked.connect(self.buttonClicks)
+        self.pushButton_17.clicked.connect(partial(self.buttonClicks, "Loop"))
         self.verticalLayout_4.addWidget(self.pushButton_17)
         self.pushButton_6 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_6.setObjectName("pushButton_6")
-        self.pushButton_6.clicked.connect(self.buttonClicks)
+        self.pushButton_6.clicked.connect(partial(self.buttonClicks, "pushButton"))
         self.verticalLayout_4.addWidget(self.pushButton_6)
         self.pushButton_9 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_9.setObjectName("pushButton_9")
-        self.pushButton_9.clicked.connect(self.buttonClicks)
+        self.pushButton_9.clicked.connect(partial(self.buttonClicks, "pushButton"))
         self.verticalLayout_4.addWidget(self.pushButton_9)
         self.pushButton_14 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_14.setObjectName("pushButton_14")
-        self.pushButton_14.clicked.connect(self.buttonClicks)
+        self.pushButton_14.clicked.connect(partial(self.buttonClicks, "pushButton"))
         self.verticalLayout_4.addWidget(self.pushButton_14)
         self.pushButton_10 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_10.setObjectName("pushButton_10")
-        self.pushButton_10.clicked.connect(self.buttonClicks)
+        self.pushButton_10.clicked.connect(partial(self.buttonClicks, "pushButton"))
         self.verticalLayout_4.addWidget(self.pushButton_10)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents_9)
         self.horizontalLayout_8.addWidget(self.scrollArea)
@@ -203,19 +208,15 @@ class Ui_MainWindow(object):
         self.pushButton_14.setText(_translate("MainWindow", "PushButton"))
         self.pushButton_10.setText(_translate("MainWindow", "PushButton"))
 
-    def buttonClicks(self):
-       
-        
-        
-        but = QtWidgets.QPushButton(str(self.num_buttons),self.scrollAreaWidgetContents_10)
+    def buttonClicks(self, buttonName):
+        but = QtWidgets.QPushButton(buttonName,self.scrollAreaWidgetContents_10)
         but.setObjectName(str(self.num_buttons))
         but.setStyleSheet("QPushButton""{""background-color : lightblue;""}")
         self.dict[self.num_buttons] = but
         self.num_buttons+=1
         self.buttons.append(but)
         length = len(self.buttons)
-  
-        #self.buttons[length - 1].setObjectName("pushButton" + str(length + 20))
+        but.clicked.connect(partial(self.popUp, buttonName, but))
         self.verticalLayout_5.addWidget(but)
 
     def move_image(self):
@@ -227,21 +228,21 @@ class Ui_MainWindow(object):
     def to_run_blocks():
         return
 
-    def select_blocks_to_run(self,button_name):
-        if self.dict[button_name].styleSheet() == "QPushButton{background-color : lightblue;}":
-            self.dict[button_name].setStyleSheet("QPushButton{background-color : green;}")
-        elif self.dict[button_name].styleSheet() == "QPushButton{background-color : green;}":
-            self.dict[button_name].setStyleSheet("QPushButton{background-color : lightblue;}")
+    # def select_blocks_to_run(self,button_name):
+    #     if self.dict[button_name].styleSheet() == "QPushButton{background-color : lightblue;}":
+    #         self.dict[button_name].setStyleSheet("QPushButton{background-color : green;}")
+    #     elif self.dict[button_name].styleSheet() == "QPushButton{background-color : green;}":
+    #         self.dict[button_name].setStyleSheet("QPushButton{background-color : lightblue;}")
+
     def ready_to_connect(self):
         if self.ready_to_select.styleSheet() == "QPushButton{background-color : lightblue;}":
             self.ready_to_select.setStyleSheet("QPushButton""{""background-color : green;}")
-            for key in self.dict:
-                self.dict[key].clicked.connect(partial(self.select_blocks_to_run,key))
+
         elif self.ready_to_select.styleSheet() == "QPushButton{background-color : green;}":
             self.ready_to_select.setStyleSheet("QPushButton""{""background-color : lightblue;}")
             for key in self.dict:
-                self.dict[key].disconnect()
                 self.dict[key].setStyleSheet("QPushButton""{""background-color : lightblue;}")
+
     def donothing(self):
         return                   
 
@@ -258,10 +259,6 @@ class Ui_MainWindow(object):
         print("pressed")                     
 
         # printing pressed       
-
-
-
-
 
     def keyPressEvent(self, event):
   
@@ -288,12 +285,35 @@ class Ui_MainWindow(object):
         elif event.key() == Qt.Key_Right:
             self.label.move(x + self.speed, y)
 
+    def popUp(self, buttonName, but):
+        print("Button Clicked:" + buttonName)
+
+        if(self.ready_to_select.styleSheet() == "QPushButton{background-color : green;}" and but.styleSheet() == "QPushButton""{""background-color : green;}"):
+            but.setStyleSheet("QPushButton""{""background-color : lightblue;}")
+
+        elif (self.ready_to_select.styleSheet() == "QPushButton{background-color : green;}"):
+            but.setStyleSheet("QPushButton""{""background-color : green;}")
+
+        elif (buttonName == "Move"):
+            _translate = QtCore.QCoreApplication.translate
+            i, okPressed = QInputDialog.getInt(self, "Get integer","Percentage:", 28, 0, 100, 1)
+        
+            if okPressed:
+                but.setText(_translate("MainWindow", "Move " + str(i)))
+
+        elif (buttonName == "loop"):
+            _translate = QtCore.QCoreApplication.translate
+            i, okPressed = QInputDialog.getInt(self, "Get integer","Percentage:", 28, 0, 100, 1)
+        
+            if okPressed:
+                but.setText(_translate("MainWindow", "Move " + str(i)))
+                
+
 
 if __name__ == "__main__":
     import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    app = QApplication(sys.argv)
+    window = Main()
+    window.show()
     sys.exit(app.exec_())
+    
