@@ -117,6 +117,7 @@ class Ui_MainWindow(object):
         self.pushButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(self.buttonClicks)
+        self.pushButton.clicked.connect(self.move_image)
         self.verticalLayout_4.addWidget(self.pushButton)
         self.pushButton_17 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_17.setObjectName("pushButton_3")
@@ -168,7 +169,7 @@ class Ui_MainWindow(object):
 
         self.pixmap = QPixmap('images.jpg')
         self.pixmap = self.pixmap.scaled(QtCore.QSize(100, 100))
-        self.label.move(1000, 1000)
+        # self.label.move(1000, 1000)
         self.label.setPixmap(self.pixmap)
         self.label.resize(self.pixmap.width(), self.pixmap.height())
         print(self.label.x())
@@ -216,6 +217,13 @@ class Ui_MainWindow(object):
   
         #self.buttons[length - 1].setObjectName("pushButton" + str(length + 20))
         self.verticalLayout_5.addWidget(but)
+
+    def move_image(self):
+        # self.label.move(self.label.x() + 10, self.label.y() + 10)
+        self.label.move(0, self.label.x() + 10)
+        print(self.label.x())
+        print(self.label.y())
+
     def to_run_blocks():
         return
 
