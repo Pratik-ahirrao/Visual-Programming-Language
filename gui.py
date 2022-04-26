@@ -15,6 +15,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QLabel
+import backend
 
 class Ui_MainWindow(object):
     def __init__(self):
@@ -26,6 +27,7 @@ class Ui_MainWindow(object):
         self.is_edited = 0
         self.num_buttons =0
         self.dict = {}
+        self.obj1=backend.target_object('images.jpg')
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -48,31 +50,16 @@ class Ui_MainWindow(object):
         self.verticalLayout_6.setObjectName("verticalLayout_6")
 
         self.runButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_12)
-        self.runButton.setObjectName("runButton")
+        self.runButton.setObjectName("runButton"
+        )
         self.runButton.setText(_translate("MainWindow", "Run"))
         #self.runButton.setStyleSheet("background-color : yellow")
-        self.runButton.setStyleSheet("QPushButton"
-                             "{"
-                             "background-color : lightblue;"
-                             "}"
-                             "QPushButton::pressed"
-                             "{"
-                             "background-color : green;"
-                             "}"
-                             )
+        self.runButton.setStyleSheet("QPushButton""{""background-color : lightblue;""}""QPushButton::pressed""{""background-color : green;""}")
         self.verticalLayout_6.addWidget(self.runButton)
 
         self.editButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_12)
         self.editButton.setObjectName("editButton")
-        self.editButton.setStyleSheet("QPushButton"
-                             "{"
-                             "background-color : lightblue;"
-                             "}"
-                             "QPushButton::pressed"
-                             "{"
-                             "background-color : green;"
-                             "}"
-                             )
+        self.editButton.setStyleSheet("QPushButton""{""background-color : lightblue;""}""QPushButton::pressed""{""background-color : green;""}")
         self.editButton.setText(_translate("MainWindow", "Edit"))
 
         self.verticalLayout_6.addWidget(self.editButton)
@@ -80,10 +67,7 @@ class Ui_MainWindow(object):
         self.removeButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_12)
         self.removeButton.setObjectName("removeButton")
         self.removeButton.setText(_translate("MainWindow", "Remove"))
-        self.removeButton.setStyleSheet("QPushButton"
-                             "{"
-                             "background-color : lightblue;"
-                             "}")
+        self.removeButton.setStyleSheet("QPushButton""{""background-color : lightblue;""}")
         self.removeButton.clicked.connect(self.clickme)
         self.verticalLayout_6.addWidget(self.removeButton)
 
@@ -95,10 +79,7 @@ class Ui_MainWindow(object):
         self.ready_to_select = QtWidgets.QPushButton(self.scrollAreaWidgetContents_12)
         self.ready_to_select.setObjectName("ready to select")
         self.ready_to_select.setText(_translate("MainWindow", "Ready to select"))
-        self.ready_to_select.setStyleSheet("QPushButton"
-                             "{"
-                             "background-color : lightblue;"
-                             "}")
+        self.ready_to_select.setStyleSheet("QPushButton""{""background-color : lightblue;""}")
         self.ready_to_select.clicked.connect(self.ready_to_connect)
         self.verticalLayout_6.addWidget(self.ready_to_select)
         self.scrollArea_4.setWidget(self.scrollAreaWidgetContents_12)
@@ -117,7 +98,7 @@ class Ui_MainWindow(object):
         self.pushButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(self.buttonClicks)
-        self.pushButton.clicked.connect(self.move_image)
+        self.pushButton.clicked.connect(partial(backend.move_left,self.obj1,10))
         self.verticalLayout_4.addWidget(self.pushButton)
         self.pushButton_17 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_17.setObjectName("pushButton_3")
@@ -167,15 +148,15 @@ class Ui_MainWindow(object):
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_11)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
 
-        self.pixmap = QPixmap('images.jpg')
-        self.pixmap = self.pixmap.scaled(QtCore.QSize(100, 100))
+        #self.pixmap = QPixmap('images.jpg')
+        #self.pixmap = self.pixmap.scaled(QtCore.QSize(100, 100))
         # self.label.move(1000, 1000)
-        self.label.setPixmap(self.pixmap)
-        self.label.resize(self.pixmap.width(), self.pixmap.height())
-        print(self.label.x())
-        print(self.label.y())
-        self.verticalLayout_6.addWidget(self.label)
-
+        #self.label.setPixmap(self.pixmap)
+        #self.label.resize(self.pixmap.width(), self.pixmap.height())
+        #print(self.label.x())
+        #print(self.label.y())
+     
+        self.verticalLayout_6.addWidget(self.obj1.label)
         self.scrollArea_3.setWidget(self.scrollAreaWidgetContents_11)
         self.horizontalLayout_8.addWidget(self.scrollArea_3)
 
