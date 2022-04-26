@@ -56,6 +56,7 @@ class Main(QMainWindow):
         self.runButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_12)
         self.runButton.setObjectName("runButton")
         self.runButton.setText(_translate("MainWindow", "Run"))
+        self.runButton.clicked.connect(self.run)
         #self.runButton.setStyleSheet("background-color : yellow")
         self.runButton.setStyleSheet("QPushButton"
                              "{"
@@ -221,7 +222,7 @@ class Main(QMainWindow):
 
     def move_image(self):
         # self.label.move(self.label.x() + 10, self.label.y() + 10)
-        self.label.move(0, self.label.x() + 10)
+        self.label.move(self.label.x() + 1, self.label.y())
         print(self.label.x())
         print(self.label.y())
 
@@ -307,6 +308,12 @@ class Main(QMainWindow):
         
             if okPressed:
                 but.setText(_translate("MainWindow", "Move " + str(i)))
+
+    def run(self):
+        if (self.ready_to_select.styleSheet() == "QPushButton{background-color : green;}"):
+            for i in self.buttons:
+                if (i.text() == "Move"):
+                    self.move_image()
                 
 
 
