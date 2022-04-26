@@ -6,15 +6,15 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QLabel
 def move_right(image_object,units):
-    image_object.label.move(image_object.label.x() + units,0)
+    image_object.label.move(image_object.label.x() + units,image_object.label.y())
 def move_left(image_object,units):
-    image_object.label.move(image_object.label.x() - units,0)
+    image_object.label.move(image_object.label.x() - units,image_object.label.y())
 
 def move_up(image_object,units):
-     image_object.label.move(0,image_object.label.y() -units)
+     image_object.label.move(image_object.label.x(),image_object.label.y() -units)
 
 def move_down(image_object,units):
-     image_object.label.move(0,image_object.label.y() +units)
+     image_object.label.move(image_object.label.x(),image_object.label.y() +units)
 
 
 
