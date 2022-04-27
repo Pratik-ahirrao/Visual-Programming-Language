@@ -327,7 +327,6 @@ class Main(QMainWindow):
 
     def remove(self):
         array = []
-        self.removeButton.setStyleSheet("QPushButton{background-color : green;}")
         
         for i in self.buttons:
             if (self.ready_to_select.styleSheet() == "QPushButton{background-color : green;}" and i.styleSheet() == "QPushButton""{""background-color : green;}"):
@@ -337,8 +336,6 @@ class Main(QMainWindow):
 
         for i in array:
             self.buttons.remove(i)
-
-        self.removeButton.setStyleSheet("QPushButton{background-color : lightblue;}")
                     
                 
 
