@@ -92,7 +92,8 @@ class Main(QMainWindow):
                              "{"
                              "background-color : lightblue;"
                              "}")
-        self.removeButton.clicked.connect(self.clickme)
+        # self.removeButton.clicked.connect(self.clickme)
+        self.removeButton.clicked.connect(self.remove)
         self.verticalLayout_6.addWidget(self.removeButton)
 
         self.scrollArea_4.setWidget(self.scrollAreaWidgetContents_12)
@@ -287,7 +288,7 @@ class Main(QMainWindow):
         elif event.key() == Qt.Key_Right:
             self.label.move(x + self.speed, y)
 
-     def popUp(self, buttonName, but):
+    def popUp(self, buttonName, but):
         print("Button Clicked:" + buttonName)
 
         if(self.ready_to_select.styleSheet() == "QPushButton{background-color : green;}" and but.styleSheet() == "QPushButton""{""background-color : green;}"):
@@ -298,14 +299,14 @@ class Main(QMainWindow):
 
         elif (buttonName == "Move"):
             _translate = QtCore.QCoreApplication.translate
-            i, okPressed = QInputDialog.getInt(self, "Get integer","Enter x co-ordinate:")
+            i, okPressed = QInputDialog.getInt(self, "Get integer","Percentage:", 28, 0, 100, 1)
         
             if okPressed:
                 but.setText(_translate("MainWindow", "Move " + str(i)))
 
         elif (buttonName == "loop"):
             _translate = QtCore.QCoreApplication.translate
-            i, okPressed = QInputDialog.getInt(self, "Get integer","Enter x co-ordinate:")
+            i, okPressed = QInputDialog.getInt(self, "Get integer","Percentage:", 28, 0, 100, 1)
         
             if okPressed:
                 but.setText(_translate("MainWindow", "Move " + str(i)))
@@ -323,6 +324,21 @@ class Main(QMainWindow):
                     elif int(x[1]) < 0:
                         print(int(x[1]))
                         backend.move_left(self.obj1,int(x[1]))
+
+    def remove(self):
+        array = []
+        self.removeButton.setStyleSheet("QPushButton{background-color : green;}")
+        
+        for i in self.buttons:
+            if (self.ready_to_select.styleSheet() == "QPushButton{background-color : green;}" and i.styleSheet() == "QPushButton""{""background-color : green;}"):
+                i.setParent(None)
+                array.append(i)
+
+
+        for i in array:
+            self.buttons.remove(i)
+
+        self.removeButton.setStyleSheet("QPushButton{background-color : lightblue;}")
                     
                 
 
