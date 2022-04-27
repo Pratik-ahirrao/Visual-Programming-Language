@@ -287,7 +287,7 @@ class Main(QMainWindow):
         elif event.key() == Qt.Key_Right:
             self.label.move(x + self.speed, y)
 
-    def popUp(self, buttonName, but):
+     def popUp(self, buttonName, but):
         print("Button Clicked:" + buttonName)
 
         if(self.ready_to_select.styleSheet() == "QPushButton{background-color : green;}" and but.styleSheet() == "QPushButton""{""background-color : green;}"):
@@ -298,14 +298,14 @@ class Main(QMainWindow):
 
         elif (buttonName == "Move"):
             _translate = QtCore.QCoreApplication.translate
-            i, okPressed = QInputDialog.getInt(self, "Get integer","Percentage:", 28, 0, 100, 1)
+            i, okPressed = QInputDialog.getInt(self, "Get integer","Enter x co-ordinate:")
         
             if okPressed:
                 but.setText(_translate("MainWindow", "Move " + str(i)))
 
         elif (buttonName == "loop"):
             _translate = QtCore.QCoreApplication.translate
-            i, okPressed = QInputDialog.getInt(self, "Get integer","Percentage:", 28, 0, 100, 1)
+            i, okPressed = QInputDialog.getInt(self, "Get integer","Enter x co-ordinate:")
         
             if okPressed:
                 but.setText(_translate("MainWindow", "Move " + str(i)))
@@ -313,9 +313,16 @@ class Main(QMainWindow):
     def run(self):
         if (self.ready_to_select.styleSheet() == "QPushButton{background-color : green;}"):
             for i in self.buttons:
-                if (i.text() == "Move"):
+                buttonName = i.text()
+                x = buttonName.split()
+                if (x[0] == "Move"):
                     #self.move_image()
-                    backend.move_right(self.obj1,10)
+                    if int(x[1]) >= 0:
+                        print(x[1])
+                        backend.move_right(self.obj1,int(x[1]))
+                    elif int(x[1]) < 0:
+                        print(int(x[1]))
+                        backend.move_left(self.obj1,int(x[1]))
                     
                 
 
