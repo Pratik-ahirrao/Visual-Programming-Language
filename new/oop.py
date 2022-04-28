@@ -33,6 +33,9 @@ class Main(QMainWindow):
         self.dict = {}
         self.obj1=backend.target_object('images.jpg')
         self.var = backend.variable("", 0)
+        self.list_loop_buttons = []
+        self.run_stack = []
+        self.button_list = []
         super().__init__()
         self.setupUi(self)
 
@@ -59,7 +62,7 @@ class Main(QMainWindow):
         self.runButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_12)
         self.runButton.setObjectName("runButton")
         self.runButton.setText(_translate("MainWindow", "Run"))
-        self.runButton.clicked.connect(self.run)
+        self.runButton.clicked.connect(self.new_run)
         #self.runButton.setStyleSheet("background-color : yellow")
         self.runButton.setStyleSheet("QPushButton"
                              "{"
@@ -133,6 +136,10 @@ class Main(QMainWindow):
         self.pushButton_17.setObjectName("pushButton_3")
         self.pushButton_17.clicked.connect(partial(self.buttonClicks, "Loop"))
         self.verticalLayout_4.addWidget(self.pushButton_17)
+        self.pushButton_16 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
+        self.pushButton_16.setObjectName("pushButton_16")
+        self.pushButton_16.clicked.connect(partial(self.buttonClicks, "End Loop"))
+        self.verticalLayout_4.addWidget(self.pushButton_16)
         self.pushButton_6 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_6.setObjectName("pushButton_6")
         self.pushButton_6.clicked.connect(partial(self.buttonClicks, "Rotate"))
@@ -212,6 +219,7 @@ class Main(QMainWindow):
         self.pushButton_9.setText(_translate("MainWindow", "Create Variable"))
         self.pushButton_14.setText(_translate("MainWindow", "Edit Variable"))
         self.pushButton_10.setText(_translate("MainWindow", "Show Variable"))
+        self.pushButton_16.setText(_translate("MainWindow", "End Loop"))
 
     def buttonClicks(self, buttonName):
         but = QtWidgets.QPushButton(buttonName,self.scrollAreaWidgetContents_10)
@@ -284,6 +292,97 @@ class Main(QMainWindow):
         elif event.key() == Qt.Key_Right:
             self.label.move(x + self.speed, y)
 
+    def add_loop_in_stack(self):
+        self.list_loop_buttons = self.list_loop_buttons[::-1]
+        #print(self.list_loop_buttons)
+        buttonname=self.list_loop_buttons[0].text()
+        x = buttonname.split()
+        val = int(x[1])
+        print('val of loop:'+ str(val))
+        for j in range(val):  
+            for i in range(1,len(self.list_loop_buttons)-1):
+                self.run_stack.append(self.list_loop_buttons[i])
+        self.list_loop_buttons = []
+
+    def add_button_list_in_run_stack(self):
+        for i in  range(len(self.button_list)):
+            buttonname = self.button_list[i].text()
+            x = buttonname.split()
+            print("in_add_button "+str(x))
+            if x[0] !="End":
+                self.run_stack.append(self.button_list[i])
+            else:
+                self.list_loop_buttons.append(self.button_list[i])
+                while(len(self.run_stack)!=0):
+                    button = self.run_stack.pop()
+                    buttonname = button.text()
+                    p = buttonname.split()
+                    print("in while loop")
+                    if(p[0]=="Loop"):
+                        self.list_loop_buttons.append(button)
+                        self.add_loop_in_stack()
+                        break
+                    else:
+                        self.list_loop_buttons.append(button)
+                        continue
+
+    def exec_run_stack(self):
+        for i in self.run_stack:
+            buttonName = i.text()
+            x = buttonName.split()
+            if (x[0] == "Move"):
+
+                    #self.move_image()
+                if len(x) == 1:
+                    x.append("0")
+                if int(x[1]) >= 0:
+                    print(x[1])
+                    self.obj1.move_right(int(x[1]))
+                elif int(x[1]) < 0:
+                        print(int(x[1]))
+                        self.obj1.move_left(int(x[1]))
+
+            elif (x[0] == "Rotate"):
+                if len(x) == 1:
+                    x.append("0")
+                print(x[1])
+                self.obj1.rotate(float(x[1]))
+
+            elif(x[0] == "Create"):
+                if len(x) == 2:
+                    x.append("0")
+                    #print(x[2])
+                self.var.setName(x[2])
+                a = self.var.getVal()
+                self.variables.append(self.var)
+                print(a)
+
+            elif(x[0] == "Edit"):
+                if len(x) == 2:
+                    x.append("0")
+                if(x[2] in self.variables):
+                    self.var.setVal(x[3])
+
+    def new_run(self):
+        if (self.ready_to_select.styleSheet() == "QPushButton{background-color : lightblue;}"):
+            for i in self.buttons:
+                self.button_list.append(i)
+        else:
+
+            for i in self.buttons:
+
+                if i.styleSheet() == "QPushButton{background-color : green;}":
+                    self.button_list.append(i)
+
+        self.add_button_list_in_run_stack()
+        self.exec_run_stack()
+
+
+
+
+
+
+
     def popUp(self, buttonName, but):
         print("Button Clicked:" + buttonName)
 
@@ -300,12 +399,12 @@ class Main(QMainWindow):
             if okPressed:
                 but.setText(_translate("MainWindow", "Move " + str(i)))
 
-        elif (buttonName == "loop"):
+        elif (buttonName == "Loop"):
             _translate = QtCore.QCoreApplication.translate
-            i, okPressed = QInputDialog.getInt(self, "Get integer","Enter x co-ordinate:")
+            i, okPressed = QInputDialog.getInt(self, "Get integer","Enter Loop Value:")
         
             if okPressed:
-                but.setText(_translate("MainWindow", "Move " + str(i)))
+                but.setText(_translate("MainWindow", "Loop " + str(i)))
 
         elif (buttonName == "Rotate"):
             _translate = QtCore.QCoreApplication.translate
@@ -329,6 +428,11 @@ class Main(QMainWindow):
         
             if okPressed and okPressed1:
                 but.setText(_translate("MainWindow", "Edit Variable " + str(j) + " " +str(i)))
+
+        elif (buttonName=="End Loop"):
+             but.setText(_translate("MainWindow", "End Loop"))
+
+
 
     def run(self):
         if (self.ready_to_select.styleSheet() == "QPushButton{background-color : lightblue;}"):
@@ -407,7 +511,7 @@ class Main(QMainWindow):
         for i in array:
             self.buttons.remove(i)
                     
-                
+               
 
 
 if __name__ == "__main__":
