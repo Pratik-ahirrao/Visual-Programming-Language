@@ -47,16 +47,26 @@ class loop:
 
 
 class variable:
-    def __init__(self,var):
-        self.var = var
+    def __init__(self,name,val):
+        self.name = name
+        self.val = val
         
-    def getvariable(self):
-        return self.var
+    def getName(self):
+        return self.name
+
+    def setName(self, y):
+        self.name = y
+        
+    def getVal(self):
+        return self.val
+
+    def setVal(self, v):
+        self.val = v
         
     def incr(self,x):
-        self.var = self.var + x
+        self.val = self.val + x
 
+    def decr(self, x):
+        self.val = self.val - x
 
-
-
-
+    
