@@ -23,6 +23,7 @@ from PyQt5.QtWidgets import *
 class Main(QMainWindow):
     def __init__(self):
         self.buttons = []
+        self.variables = []
         self.label = QtWidgets.QLabel()
         self.speed = 15
         self.is_removed = 0
@@ -31,6 +32,7 @@ class Main(QMainWindow):
         self.num_buttons =0
         self.dict = {}
         self.obj1=backend.target_object('images.jpg')
+        self.var = backend.variable("", 0)
         super().__init__()
         self.setupUi(self)
 
@@ -137,15 +139,15 @@ class Main(QMainWindow):
         self.verticalLayout_4.addWidget(self.pushButton_6)
         self.pushButton_9 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_9.setObjectName("pushButton_9")
-        self.pushButton_9.clicked.connect(partial(self.buttonClicks, "pushButton"))
+        self.pushButton_9.clicked.connect(partial(self.buttonClicks, "Create Variable"))
         self.verticalLayout_4.addWidget(self.pushButton_9)
         self.pushButton_14 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_14.setObjectName("pushButton_14")
-        self.pushButton_14.clicked.connect(partial(self.buttonClicks, "pushButton"))
+        self.pushButton_14.clicked.connect(partial(self.buttonClicks, "Edit Variable"))
         self.verticalLayout_4.addWidget(self.pushButton_14)
         self.pushButton_10 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_10.setObjectName("pushButton_10")
-        self.pushButton_10.clicked.connect(partial(self.buttonClicks, "pushButton"))
+        self.pushButton_10.clicked.connect(partial(self.buttonClicks, "Show Variable"))
         self.verticalLayout_4.addWidget(self.pushButton_10)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents_9)
         self.horizontalLayout_8.addWidget(self.scrollArea)
@@ -207,9 +209,9 @@ class Main(QMainWindow):
         self.pushButton.setText(_translate("MainWindow", "Move"))
         self.pushButton_17.setText(_translate("MainWindow", "Loop"))
         self.pushButton_6.setText(_translate("MainWindow", "Rotate"))
-        self.pushButton_9.setText(_translate("MainWindow", "PushButton"))
-        self.pushButton_14.setText(_translate("MainWindow", "PushButton"))
-        self.pushButton_10.setText(_translate("MainWindow", "PushButton"))
+        self.pushButton_9.setText(_translate("MainWindow", "Create Variable"))
+        self.pushButton_14.setText(_translate("MainWindow", "Edit Variable"))
+        self.pushButton_10.setText(_translate("MainWindow", "Show Variable"))
 
     def buttonClicks(self, buttonName):
         but = QtWidgets.QPushButton(buttonName,self.scrollAreaWidgetContents_10)
@@ -312,6 +314,22 @@ class Main(QMainWindow):
             if okPressed:
                 but.setText(_translate("MainWindow", "Rotate " + str(i)))
 
+        elif (buttonName == "Create Variable"):
+            _translate = QtCore.QCoreApplication.translate
+            i, okPressed = QInputDialog.getText(self, "Get Text","Enter Variable Name:")
+        
+            if okPressed:
+                but.setText(_translate("MainWindow", "Create Variable " + i))
+
+        elif (buttonName == "Edit Variable"):
+            _translate = QtCore.QCoreApplication.translate
+            j, okPressed1 = QInputDialog.getText(self, "Get Text","Enter Variable Name:")
+
+            i, okPressed = QInputDialog.getInt(self, "Get Integer","Enter Variable Value:")
+        
+            if okPressed and okPressed1:
+                but.setText(_translate("MainWindow", "Edit Variable " + str(j) + " " +str(i)))
+
     def run(self):
         if (self.ready_to_select.styleSheet() == "QPushButton{background-color : lightblue;}"):
             for i in self.buttons:
@@ -334,6 +352,25 @@ class Main(QMainWindow):
                         x.append("0")
                     print(x[1])
                     self.obj1.rotate(float(x[1]))
+
+                elif(x[0] == "Create"):
+                    if len(x) == 2:
+                        x.append("0")
+                    #print(x[2])
+                    self.var.setName(x[2])
+                    a = self.var.getVal()
+                    self.variables.append(self.var)
+                    print(a)
+
+                elif(x[0] == "Edit"):
+                    if len(x) == 2:
+                        x.append("0")
+                    if(x[2] in self.variables):
+                        self.var.setVal(x[3])
+
+
+
+
         else:
             for i in self.buttons:
                 if i.styleSheet() == "QPushButton{background-color : green;}":
