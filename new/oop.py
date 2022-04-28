@@ -31,7 +31,6 @@ class Main(QMainWindow):
         self.num_buttons =0
         self.dict = {}
         self.obj1=backend.target_object('images.jpg')
-
         super().__init__()
         self.setupUi(self)
 
@@ -93,7 +92,8 @@ class Main(QMainWindow):
                              "{"
                              "background-color : lightblue;"
                              "}")
-        self.removeButton.clicked.connect(self.clickme)
+        # self.removeButton.clicked.connect(self.clickme)
+        self.removeButton.clicked.connect(self.remove)
         self.verticalLayout_6.addWidget(self.removeButton)
 
         self.scrollArea_4.setWidget(self.scrollAreaWidgetContents_12)
@@ -231,12 +231,6 @@ class Main(QMainWindow):
     def to_run_blocks():
         return
 
-    # def select_blocks_to_run(self,button_name):
-    #     if self.dict[button_name].styleSheet() == "QPushButton{background-color : lightblue;}":
-    #         self.dict[button_name].setStyleSheet("QPushButton{background-color : green;}")
-    #     elif self.dict[button_name].styleSheet() == "QPushButton{background-color : green;}":
-    #         self.dict[button_name].setStyleSheet("QPushButton{background-color : lightblue;}")
-
     def ready_to_connect(self):
         if self.ready_to_select.styleSheet() == "QPushButton{background-color : lightblue;}":
             self.ready_to_select.setStyleSheet("QPushButton""{""background-color : green;}")
@@ -319,27 +313,62 @@ class Main(QMainWindow):
                 but.setText(_translate("MainWindow", "Rotate " + str(i)))
 
     def run(self):
-        if (self.ready_to_select.styleSheet() == "QPushButton{background-color : green;}"):
+        if (self.ready_to_select.styleSheet() == "QPushButton{background-color : lightblue;}"):
             for i in self.buttons:
                 buttonName = i.text()
                 x = buttonName.split()
                 if (x[0] == "Move"):
                     #self.move_image()
+
                     if len(x) == 1:
                         x.append("0")
+
                     if int(x[1]) >= 0:
                         print(x[1])
                         backend.move_right(self.obj1,int(x[1]))
                     elif int(x[1]) < 0:
                         print(int(x[1]))
                         backend.move_left(self.obj1,int(x[1]))
-
                 elif (x[0] == "Rotate"):
+                    if len(x) == 1:
+                        x.append("0")
+                    print(x[1])
+                    self.obj1.rotate(self.obj1,float(x[1]))
+        else:
+            for i in self.buttons:
+                if i.styleSheet() == "QPushButton{background-color : green;}":
+                    buttonName = i.text()
+                    x = buttonName.split()
+                    if (x[0] == "Move"):
+                        #self.move_image()
+
+                        if len(x) == 1:
+                            x.append("0")
+
+                        if int(x[1]) >= 0:
+                            print(x[1])
+                            backend.move_right(self.obj1,int(x[1]))
+                        elif int(x[1]) < 0:
+                            print(int(x[1]))
+                            backend.move_left(self.obj1,int(x[1]))
+                    elif (x[0] == "Rotate"):
                         if len(x) == 1:
                             x.append("0")
                         print(x[1])
                         self.obj1.rotate(self.obj1,float(x[1]))
-            
+                    
+
+    def remove(self):
+        array = []
+        
+        for i in self.buttons:
+            if (self.ready_to_select.styleSheet() == "QPushButton{background-color : green;}" and i.styleSheet() == "QPushButton""{""background-color : green;}"):
+                i.setParent(None)
+                array.append(i)
+
+
+        for i in array:
+            self.buttons.remove(i)
                     
                 
 
@@ -350,3 +379,12 @@ if __name__ == "__main__":
     window = Main()
     window.show()
     sys.exit(app.exec_())
+
+
+#Comments
+
+    # def select_blocks_to_run(self,button_name):
+    #     if self.dict[button_name].styleSheet() == "QPushButton{background-color : lightblue;}":
+    #         self.dict[button_name].setStyleSheet("QPushButton{background-color : green;}")
+    #     elif self.dict[button_name].styleSheet() == "QPushButton{background-color : green;}":
+    #         self.dict[button_name].setStyleSheet("QPushButton{background-color : lightblue;}")
