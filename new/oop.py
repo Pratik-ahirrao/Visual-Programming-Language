@@ -325,15 +325,15 @@ class Main(QMainWindow):
 
                     if int(x[1]) >= 0:
                         print(x[1])
-                        backend.move_right(self.obj1,int(x[1]))
+                        self.obj1.move_right(int(x[1]))
                     elif int(x[1]) < 0:
                         print(int(x[1]))
-                        backend.move_left(self.obj1,int(x[1]))
+                        self.obj1.move_left(int(x[1]))
                 elif (x[0] == "Rotate"):
                     if len(x) == 1:
                         x.append("0")
                     print(x[1])
-                    self.obj1.rotate(self.obj1,float(x[1]))
+                    self.obj1.rotate(float(x[1]))
         else:
             for i in self.buttons:
                 if i.styleSheet() == "QPushButton{background-color : green;}":
@@ -347,15 +347,15 @@ class Main(QMainWindow):
 
                         if int(x[1]) >= 0:
                             print(x[1])
-                            backend.move_right(self.obj1,int(x[1]))
+                            self.obj1.move_right(int(x[1]))
                         elif int(x[1]) < 0:
                             print(int(x[1]))
-                            backend.move_left(self.obj1,int(x[1]))
+                            self.obj1.move_left(int(x[1]))
                     elif (x[0] == "Rotate"):
                         if len(x) == 1:
                             x.append("0")
                         print(x[1])
-                        self.obj1.rotate(self.obj1,float(x[1]))
+                        self.obj1.rotate(float(x[1]))
                     
 
     def remove(self):
