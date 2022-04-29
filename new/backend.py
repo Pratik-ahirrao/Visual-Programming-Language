@@ -47,27 +47,37 @@ class loop:
 
 
 class variable:
-    def __init__(self,name,val):
-        self.name = name
-        self.val = val
-        
-    def getName(self):
-        return self.name
+    def __init__(self):
+        self.dict = {}
+    
+    def addVariable(self, varName, val):
+        self.dict[varName] = val
+    
+    def getVariable(self, varName):
+        return self.dict.get(varName)
+    
+    def setVariable(self, varName, value):
+        self.dict[varName] = value
+    
+    def remVariable(self, varName):
+        del self.dict[varName]
 
-    def setName(self, y):
-        self.name = y
+class operators:
+    def add(self, a, b):
+        return int(a) + int(b)
+    
+    def sub(self, a,b):
+        return int(a) - int(b)
+    
+    def div(self, a, b):
+        if (int(b) != 0):
+            return int(a)/int(b)
+        else:
+            return "dividing by 0!"
+    
+    def mul(self,a,b):
+        return int(a) * int(b)
         
-    def getVal(self):
-        return self.val
-
-    def setVal(self, v):
-        self.val = v
-        
-    def incr(self,x):
-        self.val = self.val + x
-
-    def decr(self, x):
-        self.val = self.val - x
 
     
 class loop:
