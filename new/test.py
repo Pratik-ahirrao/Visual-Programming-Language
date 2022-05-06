@@ -30,7 +30,7 @@ class loop:
                     i = int(x[2])
                     print(i)
                 elif x[1]=='TRUE':
-                     print("exec")   
+                     print("exec")        
             i +=1        
 
         print(count)

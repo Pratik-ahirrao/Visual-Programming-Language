@@ -36,6 +36,9 @@ class Main(QMainWindow):
         self.list_loop_buttons = []
         self.run_stack = []
         self.button_list = []
+        self.if_list = []
+        self.else_list = []
+        self.bool_if_list = []
         self.operators = backend.operators()
         super().__init__()
         self.setupUi(self)
@@ -147,8 +150,18 @@ class Main(QMainWindow):
 
         self.pushButton_endif = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_endif.setObjectName("pushButton_endif")
-        self.pushButton_endif.clicked.connect(partial(self.buttonClicks, "End If"))
+        self.pushButton_endif.clicked.connect(partial(self.buttonClicks, "Endif"))
         self.verticalLayout_4.addWidget(self.pushButton_endif)
+
+        self.pushButton_else = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
+        self.pushButton_else.setObjectName("pushButton_else")
+        self.pushButton_else.clicked.connect(partial(self.buttonClicks, "Else"))
+        self.verticalLayout_4.addWidget(self.pushButton_else)
+
+        self.pushButton_elseend = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
+        self.pushButton_elseend.setObjectName("pushButton_elseend")
+        self.pushButton_elseend.clicked.connect(partial(self.buttonClicks, "Endelse"))
+        self.verticalLayout_4.addWidget(self.pushButton_elseend)
 
         self.pushButton_16 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_16.setObjectName("pushButton_16")
@@ -255,7 +268,9 @@ class Main(QMainWindow):
         self.pushButton.setText(_translate("MainWindow", "Move"))
         self.pushButton_17.setText(_translate("MainWindow", "Loop"))
         self.pushButton_if.setText(_translate("MainWindow", "If"))
-        self.pushButton_endif.setText(_translate("MainWindow", "EndIf"))
+        self.pushButton_endif.setText(_translate("MainWindow", "Endif"))
+        self.pushButton_else.setText(_translate("MainWindow", "Else"))
+        self.pushButton_elseend.setText(_translate("MainWindow", "Endelse"))
         self.pushButton_6.setText(_translate("MainWindow", "Rotate"))
         self.pushButton_9.setText(_translate("MainWindow", "Create Variable"))
         self.pushButton_14.setText(_translate("MainWindow", "Edit Variable"))
@@ -373,8 +388,10 @@ class Main(QMainWindow):
 
     def exec_run_stack(self):
         print(self.var.dict)
-        for i in self.run_stack:
-            buttonName = i.text()
+        #for i in self.run_stack:
+        i = 0 
+        while i < len(self.run_stack):          
+            buttonName = self.run_stack[i].text()
             x = buttonName.split()
             if (x[0] == "Move"):
                 if len(x) == 1:
@@ -468,7 +485,58 @@ class Main(QMainWindow):
 
                     print("Multiplication: ",self.operators.mul(val1, val2))
 
+            elif(x[0]=="If"):
+                print(x)
+                if x[1]=="False":
+                    i = int(x[2])
+                    print(i)
+                elif x[1]=="True":
+                     print("exec")
+
+            elif(x[0]=="Else"):
+                print(x)
+                if x[1]=="True":
+                    i = int(x[2])
+                    print(i)
+                elif x[1]=="False":
+                     print("exec")
+
+            i+=1        
+
         self.run_stack = []
+
+    def check_condition(self,i):
+       if(int(i)>=10):
+           return False
+       return True   
+
+
+    def assign_if_else_in_run_stack(self):
+        for i in range(len(self.run_stack)):
+            buttonName = self.run_stack[i].text()
+            x = buttonName.split()
+            print("in ifelse:" + x[0])
+            if x[0]=="If":
+                self.if_list.append(i)
+                self.bool_if_list.append(x[1])
+            elif x[0]=="Endif":
+                #bt = self.run_stack[self.if_list.pop()]
+                _translate = QtCore.QCoreApplication.translate
+                it = self.if_list.pop()
+                bt = self.run_stack[it].text()
+                self.run_stack[it].setText(_translate("MainWindow", bt + " "+str(i)))
+
+            elif x[0]=="Else":
+                self.else_list.append(i)
+                _translate = QtCore.QCoreApplication.translate
+                self.run_stack[i].setText(_translate("MainWindow", buttonName + " "+str(self.bool_if_list.pop())))
+
+            elif x[0]=="Endelse":
+                _translate = QtCore.QCoreApplication.translate
+                it = self.else_list.pop()
+                bt = self.run_stack[it].text()
+                self.run_stack[it].setText(_translate("MainWindow", bt + " "+str(i)))
+                #self.run_stack[self.else_list.pop()]+= ' ' + str(i)   
 
     def new_run(self):
         if (self.ready_to_select.styleSheet() == "QPushButton{background-color : lightblue;}"):
@@ -482,7 +550,9 @@ class Main(QMainWindow):
                     self.button_list.append(i)
 
         self.add_button_list_in_run_stack()
+        self.assign_if_else_in_run_stack()
         self.exec_run_stack()
+
 
     def popUp(self, buttonName, but):
         print("Button Clicked:" + buttonName)
@@ -589,6 +659,31 @@ class Main(QMainWindow):
 
             if okPressed:
                 but.setText(_translate("MainWindow", but.text() + " " + i))
+       
+        elif(buttonName=="If"):
+            _translate = QtCore.QCoreApplication.translate
+            i, okPressed = QInputDialog.getText(self, "Get Text","Enter the condition:")
+            if okPressed:                
+                but.setText(_translate("MainWindow", "If " + str(self.check_condition(i))))
+        
+        elif(buttonName=="Endif"):
+            _translate = QtCore.QCoreApplication.translate
+            but.setText(_translate("MainWindow", "Endif"))
+
+        elif(buttonName=="Else"):
+
+            _translate = QtCore.QCoreApplication.translate
+            but.setText(_translate("MainWindow", "Else"))
+
+        elif(buttonName=="Endelse"):
+            _translate = QtCore.QCoreApplication.translate
+            but.setText(_translate("MainWindow", "Elseend"))                        
+
+
+
+
+
+
 
 
 
