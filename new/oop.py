@@ -129,50 +129,72 @@ class Main(QMainWindow):
         self.scrollAreaWidgetContents_9.setObjectName("scrollAreaWidgetContents_9")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_9)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
+
         self.pushButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(partial(self.buttonClicks, "Move"))
         self.verticalLayout_4.addWidget(self.pushButton)
+
         self.pushButton_17 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_17.setObjectName("pushButton_3")
         self.pushButton_17.clicked.connect(partial(self.buttonClicks, "Loop"))
         self.verticalLayout_4.addWidget(self.pushButton_17)
+
+        self.pushButton_if = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
+        self.pushButton_if.setObjectName("pushButton_if")
+        self.pushButton_if.clicked.connect(partial(self.buttonClicks, "If"))
+        self.verticalLayout_4.addWidget(self.pushButton_if)
+
+        self.pushButton_endif = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
+        self.pushButton_endif.setObjectName("pushButton_endif")
+        self.pushButton_endif.clicked.connect(partial(self.buttonClicks, "End If"))
+        self.verticalLayout_4.addWidget(self.pushButton_endif)
+
         self.pushButton_16 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_16.setObjectName("pushButton_16")
         self.pushButton_16.clicked.connect(partial(self.buttonClicks, "End Loop"))
         self.verticalLayout_4.addWidget(self.pushButton_16)
+
         self.pushButton_6 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_6.setObjectName("pushButton_6")
         self.pushButton_6.clicked.connect(partial(self.buttonClicks, "Rotate"))
         self.verticalLayout_4.addWidget(self.pushButton_6)
+
         self.pushButton_9 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_9.setObjectName("pushButton_9")
         self.pushButton_9.clicked.connect(partial(self.buttonClicks , "Create Variable"))
         self.verticalLayout_4.addWidget(self.pushButton_9)
+
         self.pushButton_14 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_14.setObjectName("pushButton_14")
         self.pushButton_14.clicked.connect(partial(self.buttonClicks, "Edit Variable"))
         self.verticalLayout_4.addWidget(self.pushButton_14)
+
         self.pushButton_10 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_10.setObjectName("pushButton_10")
         self.pushButton_10.clicked.connect(partial(self.buttonClicks, "Show Variable"))
         self.verticalLayout_4.addWidget(self.pushButton_10)
+
         self.pushButton_18 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_18.setObjectName("pushButton_18")
         self.pushButton_18.clicked.connect(partial(self.buttonClicks, "Add"))
+        self.verticalLayout_4.addWidget(self.pushButton_18)
+
         self.pushButton_19 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_19.setObjectName("pushButton_19")
         self.pushButton_19.clicked.connect(partial(self.buttonClicks, "Sub"))
+        self.verticalLayout_4.addWidget(self.pushButton_19)        
+
         self.pushButton_20 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_20.setObjectName("pushButton_20")
         self.pushButton_20.clicked.connect(partial(self.buttonClicks, "Div"))
+        self.verticalLayout_4.addWidget(self.pushButton_20)
+
         self.pushButton_21 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_21.setObjectName("pushButton_21")
         self.pushButton_21.clicked.connect(partial(self.buttonClicks, "Mul"))
-        self.verticalLayout_4.addWidget(self.pushButton_18)
-        self.verticalLayout_4.addWidget(self.pushButton_19)
-        self.verticalLayout_4.addWidget(self.pushButton_20)
         self.verticalLayout_4.addWidget(self.pushButton_21)
+
         self.scrollArea.setWidget(self.scrollAreaWidgetContents_9)
         self.horizontalLayout_8.addWidget(self.scrollArea)
 
@@ -232,6 +254,8 @@ class Main(QMainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton.setText(_translate("MainWindow", "Move"))
         self.pushButton_17.setText(_translate("MainWindow", "Loop"))
+        self.pushButton_if.setText(_translate("MainWindow", "If"))
+        self.pushButton_endif.setText(_translate("MainWindow", "EndIf"))
         self.pushButton_6.setText(_translate("MainWindow", "Rotate"))
         self.pushButton_9.setText(_translate("MainWindow", "Create Variable"))
         self.pushButton_14.setText(_translate("MainWindow", "Edit Variable"))
