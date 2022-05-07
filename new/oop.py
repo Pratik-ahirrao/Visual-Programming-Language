@@ -506,9 +506,32 @@ class Main(QMainWindow):
         self.run_stack = []
 
     def check_condition(self,i):
-       if(int(i)>=10):
-           return False
-       return True   
+        try:
+            array = i.split()
+            condition = ""
+
+            for var in array:
+                temp = self.var.getVariable(var)
+
+                if (temp != None):
+                    if (type(temp) is int):
+                        condition += str(temp)
+                    elif (type(temp) is str):
+                        condition += '"' + temp + '"'
+                    elif (type(temp) is float):
+                        condition += str(temp)
+                else:
+                    condition += var
+                condition += " " 
+
+            print(condition)
+
+            if eval(condition):
+                return True
+            else:
+                return False
+        except:
+            print("An exception occurred")
 
 
     def assign_if_else_in_run_stack(self):
@@ -677,16 +700,7 @@ class Main(QMainWindow):
 
         elif(buttonName=="Endelse"):
             _translate = QtCore.QCoreApplication.translate
-            but.setText(_translate("MainWindow", "Elseend"))                        
-
-
-
-
-
-
-
-
-
+            but.setText(_translate("MainWindow", "Elseend"))
 
     def run(self):
         if (self.ready_to_select.styleSheet() == "QPushButton{background-color : lightblue;}"):
