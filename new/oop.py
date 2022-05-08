@@ -472,20 +472,33 @@ class Main(QMainWindow):
             # print(val)
 
             if (x[0] == "Move"):
+                
                 if len(x) == 1:
                     x.append("0")
+                    x.append("0")
                 
-                val = self.var.getVariable(x[1])
+                val_x = self.var.getVariable(x[1])
+                val_y = self.var.getVariable(x[2])
 
-                if val == None:
-                    val = int(x[1])
-                
-                if val >= 0:
+                if val_x == None:
+                    val_x = int(x[1])
+                if val_y == None:
+                    val_y = int(x[2])
+
+                if val_x >= 0 and val_y >= 0:
                     # print(x[1])
-                    self.obj1.move_right(val)
-                elif val < 0:
-                        # print(int(x[1]))
-                        self.obj1.move_left(val)
+                    self.obj1.move_right(int(x[1]))
+                    self.obj1.move_down(int(x[2]))
+                elif val_x >= 0 and val_y <= 0:
+                    self.obj1.move_right(int(x[1]))
+                    self.obj1.move_up(int(-int(x[2])))
+                elif val_x < 0 and val_y >= 0:
+                    # print(int(x[1]))
+                    self.obj1.move_left(int(x[1]))
+                    self.obj1.move_down(int(x[2]))
+                elif val_x < 0 and val_y <= 0:
+                    self.obj1.move_left(int(x[1]))
+                    self.obj1.move_up(int(-int(x[2])))
 
             elif (x[0] == "Rotate"):
                 if len(x) == 1:
@@ -962,10 +975,12 @@ class Main(QMainWindow):
 
         elif (buttonName == "Move"):
             _translate = QtCore.QCoreApplication.translate
-            i, okPressed = QInputDialog.getText(self, "Get integer","Enter x co-ordinate:")
-        
+            x_val, okPressed = QInputDialog.getText(self, "Get integer","Enter x value:")
+            y_val, okPressed = QInputDialog.getText(self, "Get integer","Enter y value:")
+
             if okPressed:
-                but.setText(_translate("MainWindow", "Move " + i))
+                but.setText(_translate("MainWindow", "Move " + x_val + " " + y_val))
+
 
         elif (buttonName == "Loop"):
             _translate = QtCore.QCoreApplication.translate
@@ -1110,13 +1125,23 @@ class Main(QMainWindow):
 
                     if len(x) == 1:
                         x.append("0")
+                        x.append("0")
 
-                    if int(x[1]) >= 0:
+                    if int(x[1]) >= 0 and int(x[2]) >= 0:
                         # print(x[1])
                         self.obj1.move_right(int(x[1]))
-                    elif int(x[1]) < 0:
+                        self.obj1.move_down(int(x[2]))
+                    elif int(x[1]) >= 0 and int(x[2]) <= 0:
+                        self.obj1.move_right(int(x[1]))
+                        self.obj1.move_up(int(-int(x[2])))
+                    elif int(x[1]) < 0 and int(x[2]) >= 0:
                         # print(int(x[1]))
                         self.obj1.move_left(int(x[1]))
+                        self.obj1.move_down(int(x[2]))
+                    elif int(x[1]) < 0 and int(x[2]) <= 0:
+                        self.obj1.move_left(int(x[1]))
+                        self.obj1.move_up(int(-int(x[2])))
+
                 elif (x[0] == "Rotate"):
                     if len(x) == 1:
                         x.append("0")
@@ -1147,17 +1172,25 @@ class Main(QMainWindow):
                     buttonName = i.text()
                     x = buttonName.split()
                     if (x[0] == "Move"):
-                        #self.move_image()
 
                         if len(x) == 1:
                             x.append("0")
+                            x.append("0")
 
-                        if int(x[1]) >= 0:
+                        if int(x[1]) >= 0 and int(x[2]) >= 0:
                             # print(x[1])
                             self.obj1.move_right(int(x[1]))
-                        elif int(x[1]) < 0:
+                            self.obj1.move_down(int(x[2]))
+                        elif int(x[1]) >= 0 and int(x[2]) <= 0:
+                            self.obj1.move_right(int(x[1]))
+                            self.obj1.move_up(int(-int(x[2])))
+                        elif int(x[1]) < 0 and int(x[2]) >= 0:
                             # print(int(x[1]))
                             self.obj1.move_left(int(x[1]))
+                            self.obj1.move_down(int(x[2]))
+                        elif int(x[1]) < 0 and int(x[2]) <= 0:
+                            self.obj1.move_left(int(x[1]))
+                            self.obj1.move_up(int(-int(x[2])))
                     elif (x[0] == "Rotate"):
                         if len(x) == 1:
                             x.append("0")
