@@ -40,6 +40,7 @@ class Main(QMainWindow):
         self.if_list = []
         self.else_list = []
         self.bool_if_list = []
+        self.prev = 0
         self.operators = backend.operators()
         super().__init__()
         self.setupUi(self)
@@ -189,6 +190,11 @@ class Main(QMainWindow):
         self.pushButton_10.clicked.connect(partial(self.buttonClicks, "Show Variable"))
         self.verticalLayout_4.addWidget(self.pushButton_10)
 
+        self.pushButton_incr = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
+        self.pushButton_incr.setObjectName("pushButton_incr")
+        self.pushButton_incr.clicked.connect(partial(self.buttonClicks, "Incr Variable"))
+        self.verticalLayout_4.addWidget(self.pushButton_incr)
+
         self.pushButton_18 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_18.setObjectName("pushButton_18")
         self.pushButton_18.clicked.connect(partial(self.buttonClicks, "Add"))
@@ -276,6 +282,7 @@ class Main(QMainWindow):
         self.pushButton_9.setText(_translate("MainWindow", "Create Variable"))
         self.pushButton_14.setText(_translate("MainWindow", "Edit Variable"))
         self.pushButton_10.setText(_translate("MainWindow", "Show Variable"))
+        self.pushButton_incr.setText(_translate("MainWindow", "Incr Variable"))
         self.pushButton_16.setText(_translate("MainWindow", "End Loop"))
         self.pushButton_18.setText(_translate("MainWindow", "Add"))
         self.pushButton_19.setText(_translate("MainWindow", "Sub"))
@@ -324,7 +331,7 @@ class Main(QMainWindow):
             self.is_removed = 0
 
                 
-        print("pressed")                     
+        # print("pressed")                     
 
         # printing pressed       
 
@@ -361,39 +368,41 @@ class Main(QMainWindow):
 
 
         buttonname=self.list_loop_buttons[0].text()
+
         x = buttonname.split()
         val = int(x[1])
-        print('val of loop:'+ str(val))
-        _translate = QtCore.QCoreApplication.translate
-        self.list_loop_buttons[0].setText(_translate("MainWindow", "start_loop"))
-        self.list_loop_buttons[len(self.list_loop_buttons)-1].setText(_translate("MainWindow", "end_loop"))
+        # print('val of loop:'+ str(val))
+        if(x[0]=="Loop"):
+            _translate = QtCore.QCoreApplication.translate
+            self.list_loop_buttons[0].setText(_translate("MainWindow", "start_loop"))
+            self.list_loop_buttons[len(self.list_loop_buttons)-1].setText(_translate("MainWindow", "end_loop"))
         #self.run_stack.append(self.list_loop_buttons[len(self.list_loop_buttons)-1]) 
         #self.run_stack.append(self.list_loop_buttons[0])
-        for j in range(val):  
-            for i in range(0,len(self.list_loop_buttons)):
-                self.run_stack.append(self.list_loop_buttons[i])
-
-       
-
-        #for i in self.run_stack:
-            #print("Button:" + i.text())
+            for j in range(val):  
+                for i in range(0,len(self.list_loop_buttons)):
+                    self.run_stack.append(self.list_loop_buttons[i])
+                    self.prev += 1
 
         self.list_loop_buttons = []
 
     def add_button_list_in_run_stack(self):
+        print("Length of run stack: " + str(len(self.list_loop_buttons)))
+        self.clear_all_val()
         for i in  range(len(self.button_list)):
             buttonname = self.button_list[i].text()
             x = buttonname.split()
-            print("in_add_button "+str(x))
+            # print("in_add_button "+str(x))
             if x[0] !="End":
                 self.run_stack.append(self.button_list[i])
+                self.prev += 1
             else:
-                self.list_loop_buttons.append(self.button_list[i])
+                self.run_stack.append(self.button_list[i])
                 while(len(self.run_stack)!=0):
                     button = self.run_stack.pop()
+                    self.prev -= 1
                     buttonname = button.text()
                     p = buttonname.split()
-                    print("in while loop")
+                    # print("in while loop")
                     if(p[0]=="Loop"):
                         self.list_loop_buttons.append(button)
                         self.add_loop_in_stack()
@@ -402,6 +411,33 @@ class Main(QMainWindow):
                         self.list_loop_buttons.append(button)
                         continue
 
+    def clear_all_val(self):
+         for k in  range(len(self.button_list)):
+            buttonname = self.button_list[k].text()
+            x = buttonname.split()
+            _translate = QtCore.QCoreApplication.translate
+            if(x[0]=="start_loop"):
+                self.button_list[k].setText(_translate("MainWindow","Loop"))
+            if(x[0]=="end_loop"):
+                self.button_list[k].setText(_translate("MainWindow","End"))
+
+    def clear_all_ifs(self):
+        for k in range(len(self.button_list)):
+            buttonname = self.button_list[k].text()
+            x = buttonname.split()
+            _translate = QtCore.QCoreApplication.translate
+            if(x[0]=="If"):
+                self.button_list[k].setText(_translate("MainWindow","If")) 
+            if(x[0]=="Else"):
+                self.button_list[k].setText(_translate("MainWindow","Else"))           
+
+
+
+
+
+
+
+
     def exec_run_stack(self):
         # for j in self.run_stack:
         #     print("Run stack: " + j.text())
@@ -409,10 +445,14 @@ class Main(QMainWindow):
         self.active = False
         self.variable_stack = []
         self.pops = 0
-
-        while i < len(self.run_stack):          
+        self.num_pops = []
+        # print("\nprev:" + str(self.prev))
+        val = len(self.run_stack)
+        while i < val:          
             buttonName = self.run_stack[i].text()
             x = buttonName.split()
+            # print(val)
+
             if (x[0] == "Move"):
                 if len(x) == 1:
                     x.append("0")
@@ -461,76 +501,136 @@ class Main(QMainWindow):
                 
             elif(x[0] == "Add"):
                 if (len(x) < 3):
-                    break
+                    continue
                 
                 elif (len(x) == 3):
-                    val1 = self.var.getVariable(x[1])
-                    val2 = self.var.getVariable(x[2])
+                    val1 = None
+                    val2 = None
+                    
+                    for j in self.variable_stack:
+                        if (j[0] == x[1]):
+                            val1 = j[1]
+
+                    for j in self.variable_stack:
+                        if (j[0] == x[2]):
+                            val1 = j[1]
 
                     if (val1 == None):
-                        val1 = int(x[1])
-                    
+                        val1 = x[1]
+
                     if (val2 == None):
-                        val2 = int(x[2])
+                        val2 = x[2]
 
                     print("Addition: ",self.operators.add(val1, val2))
             
-            elif(x[0] == "Sub"):
-                if (len(x) < 3):
-                    break
-                
+            elif(x[0]=="Incr"):
+
+                if (len(x) < 3): 
+                    continue
+
                 elif (len(x) == 3):
-                    val1 = self.var.getVariable(x[1])
-                    val2 = self.var.getVariable(x[2])
+                    val1 = None
+                    val2 = x[2]
+                    count = 0
+                    pos = 0
+                    
+                    for j in self.variable_stack:
+                        if (j[0] == x[1]):
+                            val1 = j[1]
+                            pos = count
+                        count += 1
 
                     if (val1 == None):
-                        val1 = int(x[1])
+                        continue
+
+                    k = self.operators.add(val1,val2)
+                    self.variable_stack[pos][1] = k
+                    #print("Addition: ",self.operators.add(val1, val2))
+
+            elif(x[0] == "Sub"):
+                if (len(x) < 3):
+                    continue
+                
+                elif (len(x) == 3):
+                    val1 = None
+                    val2 = None
                     
+                    for j in self.variable_stack:
+                        if (j[0] == x[1]):
+                            val1 = j[1]
+
+                    for j in self.variable_stack:
+                        if (j[0] == x[2]):
+                            val1 = j[1]
+
+                    if (val1 == None):
+                        val1 = x[1]
+
                     if (val2 == None):
-                        val2 = int(x[2])
+                        val2 = x[2]
 
                     print("Subtraction: ",self.operators.sub(val1, val2))
 
             elif(x[0] == "Div"):
                 if (len(x) < 3):
-                    break
+                    continue
                 
                 elif (len(x) == 3):
-                    val1 = self.var.getVariable(x[1])
-                    val2 = self.var.getVariable(x[2])
+                    val1 = None
+                    val2 = None
+                    
+                    for j in self.variable_stack:
+                        if (j[0] == x[1]):
+                            val1 = j[1]
+
+                    for j in self.variable_stack:
+                        if (j[0] == x[2]):
+                            val1 = j[1]
 
                     if (val1 == None):
-                        val1 = int(x[1])
-                    
+                        val1 = x[1]
+
                     if (val2 == None):
-                        val2 = int(x[2])
+                        val2 = x[2]
 
                     print("Division: ",self.operators.div(val1, val2))
 
             elif(x[0] == "Mul"):
                 if (len(x) < 3):
-                    break
+                    continue
                 
                 elif (len(x) == 3):
-                    val1 = self.var.getVariable(x[1])
-                    val2 = self.var.getVariable(x[2])
+                    val1 = None
+                    val2 = None
+                    
+                    for j in self.variable_stack:
+                        if (j[0] == x[1]):
+                            val1 = j[1]
+
+                    for j in self.variable_stack:
+                        if (j[0] == x[2]):
+                            val1 = j[1]
 
                     if (val1 == None):
-                        val1 = int(x[1])
-                    
+                        val1 = x[1]
+
                     if (val2 == None):
-                        val2 = int(x[2])
+                        val2 = x[2]
 
                     print("Multiplication: ",self.operators.mul(val1, val2))
 
             elif(x[0]=="If"):
-                self.active = True
                 # print(x)
                 if x[1]=="False":
                     i = int(x[2])
                     print(i)
                 elif x[1]=="True":
-                     print("exec")
+                    if (self.active):
+                        self.num_pops.append(self.pops)
+                        self.pops = 0
+
+                    else:
+                        self.active = True
 
             elif(x[0]=="Else"):
                 # print(x)
@@ -538,23 +638,36 @@ class Main(QMainWindow):
                     i = int(x[2])
                     print(i)
                 elif x[1]=="False":
-                     print("exec")
+                    if (self.active):
+                        self.num_pops.append(self.pops)
+                        self.pops = 0
 
-            elif(x[0] == "start_loop"):
-                self.active = True
+                    else:
+                        self.active = True
+
+            elif(x[0] == "start_loop" or x[0] == "Loop"):
+                if (self.active):
+                    self.num_pops.append(self.pops)
+                    self.pops = 0
+
+                else:
+                    self.active = True
 
             elif(x[0] == "end_loop"):
-                print(self.variable_stack)
-                name = self.variable_stack.pop()
+                while(self.pops != 0):
+                    name = self.variable_stack.pop()
 
-                for k in self.variable_stack:
-                    if (name[0] == k[0]):
-                        self.var.setVariable(name[0], int(k[1]))
+                    for k in self.variable_stack:
+                        if (name[0] == k[0]):
+                            self.var.setVariable(name[0], int(k[1]))
 
-                self.pops -= 1
+                    self.pops -= 1
+                
+                if (len(self.num_pops) != 0):
+                    self.pops = self.num_pops.pop()
 
-                if (self.pops == 0):
-                    self.active = False
+                elif (len(self.num_pops) == 0):
+                    self.active = False     
 
 
             elif(x[0] == "Variable"):
@@ -565,25 +678,46 @@ class Main(QMainWindow):
                 self.variable_stack.append([x[1], x[2]])
 
             elif(x[0] == "Endif"):
-                
-                name = self.variable_stack.pop()
+                while(self.pops != 0):
+                    name = self.variable_stack.pop()
 
-                # print(self.variable_stack)
-                for k in self.variable_stack:
-                    if (name[0] == k[0]):
-                        self.var.setVariable(name[0], int(k[1]))
+                    for k in self.variable_stack:
+                        if (name[0] == k[0]):
+                            self.var.setVariable(name[0], int(k[1]))
 
-                self.pops -= 1
-                
-                if (self.pops == 0):
+                    self.pops -= 1
+
+
+                # print("After Endif:" + str(len(self.variable_stack)))
+                if (len(self.num_pops) != 0):
+                    self.pops = self.num_pops.pop()
+
+                elif (len(self.num_pops) == 0):
                     self.active = False
             
             elif(x[0] == "Show"):
-                print(self.var.dict)
+                print(self.variable_stack)
+            
+            elif(x[0] == "Endelse"):
+                while(self.pops != 0):
+                    name = self.variable_stack.pop()
 
-            i+=1        
+                    for k in self.variable_stack:
+                        if (name[0] == k[0]):
+                            self.var.setVariable(name[0], int(k[1]))
 
-        self.run_stack = []
+                    self.pops -= 1
+
+
+                # print("After Endif:" + str(len(self.variable_stack)))
+                if (len(self.num_pops) != 0):
+                    self.pops = self.num_pops.pop()
+
+                elif (len(self.num_pops) == 0):
+                    self.active = False
+            i += 1
+
+        self.prev = len(self.run_stack)            
 
     def check_condition(self,i):
         try:
@@ -613,15 +747,21 @@ class Main(QMainWindow):
 
 
     def assign_if_else_in_run_stack(self):
+        # for j in self.button_list:
+        #     print("Inside the assign function:" + j.text())
+
         for i in range(len(self.run_stack)):
             buttonName = self.run_stack[i].text()
+            # print(buttonName)
             x = buttonName.split()
-            print("in ifelse:" + x[0])
+            # print("Lenght of if else:" + str(len(x)))
+            # print("in ifelse:" + x[0])
             if x[0]=="If":
                 self.if_list.append(i)
+                # print("Value:" + str(x[1]))
                 self.bool_if_list.append(x[1])
             elif x[0]=="Endif":
-                #bt = self.run_stack[self.if_list.pop()]
+                # bt = self.run_stack[self.if_list.pop()]
                 _translate = QtCore.QCoreApplication.translate
                 it = self.if_list.pop()
                 bt = self.run_stack[it].text()
@@ -640,17 +780,39 @@ class Main(QMainWindow):
                 #self.run_stack[self.else_list.pop()]+= ' ' + str(i)   
 
     def new_run(self):
+        while(len(self.list_loop_buttons) > 0):
+            self.list_loop_buttons.pop()
+            
+        while(len(self.button_list) > 0):
+            self.button_list.pop()
+
         if (self.ready_to_select.styleSheet() == "QPushButton{background-color : lightblue;}"):
             for i in self.buttons:
+                # print("Inside button list: " + i.text())
                 self.button_list.append(i)
         else:
             for i in self.buttons:
                 if i.styleSheet() == "QPushButton{background-color : green;}":
                     self.button_list.append(i)
 
+        while(len(self.run_stack) > 0):
+            print("In the deletion!\n")
+            self.run_stack.pop()
+        print("Run stack length before:" + str(len(self.run_stack)))
+
+        # print("Length of list loop buttons:" + str(len(self.list_loop_buttons)))
+        # print("Number of buttons: " + str(len(self.buttons)))
+        # for i in self.button_list:
+        #     print(i.text())
         self.add_button_list_in_run_stack()
+        for i in self.run_stack:
+            print("In run stack:" + i.text())
+        # print("Runs stack length after add button:" + str(len(self.run_stack)))
         self.assign_if_else_in_run_stack()
+        # print("Run stack length after all operations:" + str(len(self.run_stack)))
+
         self.exec_run_stack()
+        self.clear_all_ifs()
 
 
     def popUp(self, buttonName, but):
@@ -710,6 +872,20 @@ class Main(QMainWindow):
 
         elif (buttonName=="End Loop"):
              but.setText(_translate("MainWindow", "End Loop"))
+
+
+        elif(buttonName=="Incr Variable"):
+            _translate = QtCore.QCoreApplication.translate
+            i, okPressed = QInputDialog.getText(self, "Get Variable","Enter Variable:")
+        
+            if okPressed:
+                but.setText(_translate("MainWindow", "Incr " + i))
+
+            i, okPressed = QInputDialog.getText(self, "Increment","Enter Increment Value:")
+        
+            if okPressed:
+                but.setText(_translate("MainWindow", but.text()+" "+str(i)))    
+
         
         elif (buttonName == "Add"):
             _translate = QtCore.QCoreApplication.translate

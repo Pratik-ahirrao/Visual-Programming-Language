@@ -60,7 +60,10 @@ class variable:
         self.dict[varName] = value
     
     def remVariable(self, varName):
-        del self.dict[varName]
+        temp = self.getVariable(varName)
+
+        if (temp != None):
+            del self.dict[varName]
 
 class operators:
     def add(self, a, b):
