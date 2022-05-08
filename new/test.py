@@ -6,6 +6,7 @@ class loop:
         self.button_list = button_list
         self.if_list = []
         self.else_list = []
+        
     def add_loop_in_stack(self):
         self.list_loop_buttons = self.list_loop_buttons[::-1]
         print(self.list_loop_buttons)
@@ -23,15 +24,21 @@ class loop:
         i = 0 
         while(i<len(self.run_stack)):
             x = self.run_stack[i].split()
-            print(x)
+            j = 0
+
             count = count + 1
+            if x[0]=='ELSE':
+                print(j)
             if x[0]=='IF':
                 if x[1]=='FALSE':
                     i = int(x[2])
                     print(i)
                 elif x[1]=='TRUE':
-                     print("exec")        
-            i +=1        
+                     print("exec")
+                     i = int(x[3])
+
+            i +=1  
+            print(x)      
 
         print(count)
 
@@ -42,12 +49,13 @@ class loop:
             if x[0]=='IF':
                 self.if_list.append(i)
             elif x[0]=='ENDIF':
-                self.run_stack[self.if_list.pop()] += ' ' + str(i)
+                lt = self.if_list.pop()
+                if(len(x)==2):
+                    self.run_stack[lt]+=' '+str(-1) #no else present then first assign -1 to it      
+                self.run_stack[lt] += ' ' + str(i)
             elif x[0]=='ELSE':
-                self.else_list.append(i)
-            elif x[0]=='ENDELSE':
-                self.run_stack[self.else_list.pop()]+= ' ' + str(i)        
-
+                ik = self.if_list[-1]
+                self.run_stack[ik]+=' '+ str(i)
 
     def add_button_list_in_run_stack(self):
         for i in  range(len(self.button_list)):
@@ -70,7 +78,7 @@ class loop:
 
 
 if __name__ == "__main__":
-    button_list = ['LOOP 2','IF FALSE','MOVE 10','MOVE 10','ENDIF','END 2']
+    button_list = ['IF TRUE','MOVE 10','MOVE 10','MOVE 10','ELSE','MOVE 10','ENDIF']
     l = loop(button_list)
     l.add_button_list_in_run_stack()
     l.assign_if_else_in_run_stack()

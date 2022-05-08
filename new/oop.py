@@ -360,7 +360,7 @@ class Main(QMainWindow):
         val = int(x[1])
         print('val of loop:'+ str(val))
         for j in range(val):  
-            for i in range(1,len(self.list_loop_buttons)-1):
+            for i in range(0,len(self.list_loop_buttons)):
                 self.run_stack.append(self.list_loop_buttons[i])
         self.list_loop_buttons = []
 
