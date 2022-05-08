@@ -447,8 +447,8 @@ class Main(QMainWindow):
         self.pops = 0
         self.num_pops = []
         # print("\nprev:" + str(self.prev))
-        val = len(self.run_stack)
-        while i < val:          
+        val3 = len(self.run_stack)
+        while i < val3:          
             buttonName = self.run_stack[i].text()
             x = buttonName.split()
             # print(val)
