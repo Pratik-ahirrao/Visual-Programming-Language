@@ -484,21 +484,22 @@ class Main(QMainWindow):
                     val_x = int(x[1])
                 if val_y == None:
                     val_y = int(x[2])
+                   
 
                 if val_x >= 0 and val_y >= 0:
                     # print(x[1])
-                    self.obj1.move_right(int(x[1]))
-                    self.obj1.move_down(int(x[2]))
+                    self.obj1.move_right(val_x)
+                    self.obj1.move_down(val_y)
                 elif val_x >= 0 and val_y <= 0:
-                    self.obj1.move_right(int(x[1]))
-                    self.obj1.move_up(int(-int(x[2])))
+                    self.obj1.move_right(val_x)
+                    self.obj1.move_up(-val_y)
                 elif val_x < 0 and val_y >= 0:
                     # print(int(x[1]))
-                    self.obj1.move_left(int(x[1]))
-                    self.obj1.move_down(int(x[2]))
+                    self.obj1.move_left(val_x)
+                    self.obj1.move_down(val_y)
                 elif val_x < 0 and val_y <= 0:
-                    self.obj1.move_left(int(x[1]))
-                    self.obj1.move_up(int(-int(x[2])))
+                    self.obj1.move_left(val_x)
+                    self.obj1.move_up(-val_y)
 
             elif (x[0] == "Rotate"):
                 if len(x) == 1:
