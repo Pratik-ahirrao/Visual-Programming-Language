@@ -978,6 +978,11 @@ class Main(QMainWindow):
             x_val, okPressed = QInputDialog.getText(self, "Get integer","Enter x value:")
             y_val, okPressed = QInputDialog.getText(self, "Get integer","Enter y value:")
 
+            if x_val == "" or x_val == None:
+                x_val = "0"
+            if y_val == "" or y_val == None:
+                y_val = "0"
+
             if okPressed:
                 but.setText(_translate("MainWindow", "Move " + x_val + " " + y_val))
 
