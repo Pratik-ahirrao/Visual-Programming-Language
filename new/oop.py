@@ -84,20 +84,20 @@ class Main(QMainWindow):
                              )
         self.verticalLayout_6.addWidget(self.runButton)
 
-        self.editButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_12)
-        self.editButton.setObjectName("editButton")
-        self.editButton.setStyleSheet("QPushButton"
-                             "{"
-                             "background-color : lightblue;"
-                             "}"
-                             "QPushButton::pressed"
-                             "{"
-                             "background-color : green;"
-                             "}"
-                             )
-        self.editButton.setText(_translate("MainWindow", "Edit"))
+        # self.editButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_12)
+        # self.editButton.setObjectName("editButton")
+        # self.editButton.setStyleSheet("QPushButton"
+        #                      "{"
+        #                      "background-color : lightblue;"
+        #                      "}"
+        #                      "QPushButton::pressed"
+        #                      "{"
+        #                      "background-color : green;"
+        #                      "}"
+        #                      )
+        # self.editButton.setText(_translate("MainWindow", "Edit"))
 
-        self.verticalLayout_6.addWidget(self.editButton)
+        # self.verticalLayout_6.addWidget(self.editButton)
 
         self.removeButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents_12)
         self.removeButton.setObjectName("removeButton")
@@ -192,11 +192,6 @@ class Main(QMainWindow):
         self.pushButton_9.setObjectName("pushButton_9")
         self.pushButton_9.clicked.connect(partial(self.buttonClicks , "Create Variable"))
         self.verticalLayout_4.addWidget(self.pushButton_9)
-
-        self.pushButton_14 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
-        self.pushButton_14.setObjectName("pushButton_14")
-        self.pushButton_14.clicked.connect(partial(self.buttonClicks, "Edit Variable"))
-        self.verticalLayout_4.addWidget(self.pushButton_14)
 
         self.pushButton_10 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_9)
         self.pushButton_10.setObjectName("pushButton_10")
@@ -293,7 +288,6 @@ class Main(QMainWindow):
         self.pushButton_elseend.setText(_translate("MainWindow", "Endelse"))
         self.pushButton_6.setText(_translate("MainWindow", "Rotate"))
         self.pushButton_9.setText(_translate("MainWindow", "Create Variable"))
-        self.pushButton_14.setText(_translate("MainWindow", "Edit Variable"))
         self.pushButton_10.setText(_translate("MainWindow", "Show Variable"))
         self.pushButton_incr.setText(_translate("MainWindow", "Incr Variable"))
         self.pushButton_16.setText(_translate("MainWindow", "End Loop"))
@@ -507,29 +501,29 @@ class Main(QMainWindow):
                 # print(x[1])
                 self.obj1.rotate(float(x[1]))
 
-            elif(x[0] == "Edit"):
-                try:
-                    if(x[2] in self.variables):
-                        array = x[2].split()
-                        condition = ""
+            # elif(x[0] == "Edit"):
+            #     try:
+            #         if(x[2] in self.variables):
+            #             array = x[2].split()
+            #             condition = ""
 
-                        for var in array:
-                            temp = self.var.getVariable(var)
+            #             for var in array:
+            #                 temp = self.var.getVariable(var)
 
-                            if (temp != None):
-                                if (type(temp) is int):
-                                    condition += str(temp)
-                                elif (type(temp) is str):
-                                    condition += '"' + temp + '"'
-                                elif (type(temp) is float):
-                                    condition += str(temp)
-                            else:
-                                condition += var
-                            condition += " " 
+            #                 if (temp != None):
+            #                     if (type(temp) is int):
+            #                         condition += str(temp)
+            #                     elif (type(temp) is str):
+            #                         condition += '"' + temp + '"'
+            #                     elif (type(temp) is float):
+            #                         condition += str(temp)
+            #                 else:
+            #                     condition += var
+            #                 condition += " " 
 
-                        self.var.setVariable(x[1], eval(condition))
-                except:
-                    print("Wrong input!\n")
+            #             self.var.setVariable(x[1], eval(condition))
+            #     except:
+            #         print("Wrong input!\n")
                 
             elif(x[0] == "Add"):
                 if (len(x) < 3):
@@ -692,9 +686,9 @@ class Main(QMainWindow):
 
             elif(x[0]=="Else"):
                 # print(x)
-                temp = not (self.execute_if.pop())
+                temp = str(self.execute_if.pop())
 
-                if temp =="True":
+                if temp =="False":
                     if (self.active):
                         self.num_pops.append(self.pops)
                         self.pops = 0
@@ -703,7 +697,7 @@ class Main(QMainWindow):
                         self.active = True
                     
 
-                elif temp =="False":
+                elif temp =="True":
                     if (self.active):
                         self.num_pops.append(self.pops)
                         self.pops = 0
@@ -712,8 +706,10 @@ class Main(QMainWindow):
                         self.active = True
 
                     counter = 0
+                    # print("hello there!")
 
                     for l in range(i + 1, len(self.run_stack)):
+                        # print("Hello i am here!")
                         temp = self.run_stack[l].text()
                         z = temp.split()
 
@@ -722,8 +718,10 @@ class Main(QMainWindow):
                         elif (z[0] == "Endelse" and counter > 0):
                             counter -= 1
                         elif (z[0] == "Endelse" and counter == 0):
+                            # print("Hello i am here!")
                             i = l - 1
                             break
+                    # print("The value it is jumping to:" + str(i))
 
             elif(x[0] == "start_loop" or x[0] == "Loop"):
                 if (self.active):
@@ -810,6 +808,9 @@ class Main(QMainWindow):
                 temp = str(self.execute_while.pop())
 
                 if temp == "False":
+                    print("Exiting while!")
+                
+                elif temp == "True":
                     while(self.pops != 0):
                         name = self.variable_stack.pop()
 
@@ -824,8 +825,7 @@ class Main(QMainWindow):
 
                     if (len(self.num_pops) == 0):
                         self.active = False
-                
-                elif temp == "True":
+
                     counter = 0
                     
                     for l in range(i - 1, -1, -1):
@@ -1018,14 +1018,14 @@ class Main(QMainWindow):
 
             self.var.addVariable(name, val)
 
-        elif (buttonName == "Edit Variable"):
-            _translate = QtCore.QCoreApplication.translate
-            j, okPressed1 = QInputDialog.getText(self, "Get Text","Enter Variable Name:")
+        # elif (buttonName == "Edit Variable"):
+        #     _translate = QtCore.QCoreApplication.translate
+        #     j, okPressed1 = QInputDialog.getText(self, "Get Text","Enter Variable Name:")
 
-            i, okPressed = QInputDialog.getInt(self, "Get Integer","Enter Variable Value:")
+        #     i, okPressed = QInputDialog.getInt(self, "Get Integer","Enter Variable Value:")
         
-            if okPressed and okPressed1:
-                but.setText(_translate("MainWindow", "Edit Variable " + str(j) + " " +str(i)))
+        #     if okPressed and okPressed1:
+        #         but.setText(_translate("MainWindow", "Edit Variable " + str(j) + " " +str(i)))
 
         elif (buttonName=="End Loop"):
              but.setText(_translate("MainWindow", "End Loop"))
@@ -1163,11 +1163,11 @@ class Main(QMainWindow):
                     self.variables.append(self.var)
                     # print(a)
 
-                elif(x[0] == "Edit"):
-                    if len(x) == 2:
-                        x.append("0")
-                    if(x[2] in self.variables):
-                        self.var.setVal(x[3])
+                # elif(x[0] == "Edit"):
+                #     if len(x) == 2:
+                #         x.append("0")
+                #     if(x[2] in self.variables):
+                #         self.var.setVal(x[3])
 
 
 
